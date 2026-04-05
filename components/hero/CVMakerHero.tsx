@@ -81,23 +81,6 @@ export function CVMakerHero() {
                 </button>
               </Link>
             </motion.div>
-
-            {/* Trust Indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex items-center gap-4 pt-2"
-            >
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs text-slate-400">No credit card required</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs text-slate-400">Free forever plan</span>
-              </div>
-            </motion.div>
           </div>
 
           {/* Right Column - CV Mockup + Features */}

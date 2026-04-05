@@ -52,8 +52,6 @@ export function CVMakerHero() {
               transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-linear-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20 backdrop-blur-sm"
             >
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-xs font-medium text-cyan-300">AI-Powered CV Builder</span>
             </motion.div>
 
             {/* Heading */}

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Geist, Geist_Mono, Inter } from "next/font/google"
 
 import "./globals.css"
@@ -12,6 +13,11 @@ const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 })
+
+export const metadata: Metadata = {
+  title: 'ATS CV Maker - Create Professional CVs',
+  description: 'Build ATS-friendly CVs with real-time preview and instant PDF export',
+}
 
 export default function RootLayout({
   children,

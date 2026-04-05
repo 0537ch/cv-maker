@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  fullName  String?  @map("full_name")
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  cvs       CV[]
+
+  @@map("profiles")
+}
+
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model CV {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  title      String
+  templateId String   @default("modern") @map("template_id")
+  cvData     Json     @default("{}") @map("cv_data")
+  isFavorite Boolean  @default(false) @map("is_favorite")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  user       Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([cvData], map: "idx_cvs_data", type: Gin)
+  @@index([userId], map: "idx_cvs_user_id")
+  @@map("cvs")
+}
+
+model Template {
+  id          String  @id
+  name        String
+  description String?
+  previewUrl  String? @map("preview_url")
+  category    String
+  isPremium   Boolean @default(false) @map("is_premium")
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  @@map("templates")
+}

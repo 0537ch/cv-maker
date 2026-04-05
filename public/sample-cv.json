@@ -1,0 +1,88 @@
+{
+  "version": "1.0",
+  "title": "Sample CV - John Doe",
+  "exportedAt": "2025-01-01T00:00:00.000Z",
+  "data": {
+    "personalInfo": {
+      "fullName": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1 (555) 123-4567",
+      "location": "San Francisco, CA",
+      "website": "https://johndoe.com",
+      "linkedin": "https://linkedin.com/in/johndoe",
+      "github": "https://github.com/johndoe",
+      "summary": "Experienced software engineer with expertise in full-stack development, cloud architecture, and team leadership. Passionate about building scalable applications and mentoring junior developers."
+    },
+    "experience": [
+      {
+        "id": "exp1",
+        "position": "Senior Software Engineer",
+        "company": "Tech Corp",
+        "startDate": "2022-01-01",
+        "endDate": "",
+        "current": true,
+        "description": "Led development of microservices architecture serving 1M+ users\n• Mentored team of 5 junior developers\n• Improved system performance by 40% through optimization"
+      },
+      {
+        "id": "exp2",
+        "position": "Software Engineer",
+        "company": "StartupXYZ",
+        "startDate": "2019-06-01",
+        "endDate": "2021-12-31",
+        "current": false,
+        "description": "Built RESTful APIs using Node.js and Express\n• Developed responsive web applications with React\n• Implemented CI/CD pipelines reducing deployment time by 60%"
+      }
+    ],
+    "education": [
+      {
+        "id": "edu1",
+        "degree": "Bachelor of Science in Computer Science",
+        "institution": "University of California",
+        "field": "Computer Science",
+        "startDate": "2015-09-01",
+        "endDate": "2019-05-31",
+        "gpa": "3.8"
+      }
+    ],
+    "skills": [
+      {
+        "id": "skill1",
+        "name": "JavaScript",
+        "level": "expert",
+        "category": "Programming"
+      },
+      {
+        "id": "skill2",
+        "name": "React",
+        "level": "expert",
+        "category": "Frontend"
+      },
+      {
+        "id": "skill3",
+        "name": "Node.js",
+        "level": "expert",
+        "category": "Backend"
+      },
+      {
+        "id": "skill4",
+        "name": "Python",
+        "level": "intermediate",
+        "category": "Programming"
+      },
+      {
+        "id": "skill5",
+        "name": "AWS",
+        "level": "intermediate",
+        "category": "Cloud"
+      }
+    ],
+    "projects": [],
+    "sectionHeaders": {
+      "personalInfo": "Professional Summary",
+      "experience": "Professional Experience",
+      "education": "Education",
+      "skills": "Core Competencies",
+      "projects": "Projects"
+    }
+  }
+}

@@ -7,8 +7,10 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+.env
 # testing
+
+supabase
 /coverage
 
 # next.js
@@ -34,3 +36,10 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+docs
+.claude
+CLAUDE.md
+
+# Database - Supabase temp files only
+supabase/.temp/

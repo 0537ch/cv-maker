@@ -46,13 +46,7 @@ export function CVMakerHero() {
           {/* Left Column - Hero Content */}
           <div className="space-y-4 lg:space-y-6">
             {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-linear-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20 backdrop-blur-sm"
-            >
-            </motion.div>
+            
 
             {/* Heading */}
             <div className="space-y-2 lg:space-y-3">

@@ -200,18 +200,18 @@ export function ExperienceForm({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-11 w-11 min-h-[44px] min-w-[44px]"
                 onClick={() => startEdit(exp)}
               >
-                <HugeiconsIcon icon={Pencil} size={14} />
+                <HugeiconsIcon icon={Pencil} size={16} />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                className="h-11 w-11 min-h-[44px] min-w-[44px] text-muted-foreground hover:text-destructive hover:bg-destructive/20"
                 onClick={() => handleDelete(exp.id)}
               >
-                <HugeiconsIcon icon={Trash2} size={14} />
+                <HugeiconsIcon icon={Trash2} size={16} />
               </Button>
             </div>
 
@@ -221,7 +221,7 @@ export function ExperienceForm({
                 {editingId === exp.id ? (
                   // Edit Mode
                   <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="space-y-2">
                         <Label>Company</Label>
                         <Input
@@ -240,7 +240,7 @@ export function ExperienceForm({
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="space-y-2">
                         <Label>Start Date</Label>
                         <Input

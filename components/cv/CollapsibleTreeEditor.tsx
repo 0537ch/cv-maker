@@ -377,13 +377,15 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
   return (
     <div className="space-y-2">
       {/* Profile Section */}
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border border-cyan-500/20 rounded-lg overflow-hidden bg-slate-900/40 backdrop-blur-sm">
         <button
           onClick={() => toggleSection('profile')}
-          className="w-full flex items-center gap-2 p-3 bg-muted/50 hover:bg-muted/80 transition-colors"
+          className="w-full flex items-center gap-2 p-3 bg-slate-900/60 hover:bg-slate-900/80
+                     hover:scale-[1.01] hover:shadow-lg hover:shadow-cyan-500/10
+                     transition-all duration-200"
         >
           <HugeiconsIcon icon={expandedSections.has('profile') ? ChevronDown : ChevronRight} size={16} />
-          <HugeiconsIcon icon={User} size={16} />
+          <HugeiconsIcon icon={User} size={16} className="text-cyan-400" />
           <span className="font-semibold">Profile</span>
           <span className="text-xs text-muted-foreground ml-auto">
             {profileFields.length} fields
@@ -399,20 +401,28 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                   type="text"
                   value={nameField.label}
                   onChange={(e) => handleFieldChange(nameField.id, { label: e.target.value })}
-                  className="text-sm font-medium px-2 py-1 border rounded-md bg-background w-full"
+                  className="text-sm font-medium px-2 py-1 border rounded-md
+                             bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                             focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                             text-white w-full
+                             transition-all duration-200"
                   placeholder="Field label"
                 />
                 <input
                   type={nameField.type}
                   value={nameField.value}
                   onChange={(e) => handleFieldChange(nameField.id, { value: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md text-sm"
+                  className="w-full px-3 py-2 border rounded-md text-sm
+                             bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                             focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                             text-white placeholder:text-slate-500
+                             transition-all duration-200"
                   placeholder={nameField.label}
                 />
               </div>
             ) : (
               <div className="space-y-2">
-                <div className="p-3 bg-muted/50 rounded-md text-sm text-muted-foreground">
+                <div className="p-3 bg-slate-900/20 border border-cyan-500/10 rounded-md text-sm text-muted-foreground backdrop-blur-sm">
                   No name field found.
                 </div>
                 <Button
@@ -434,6 +444,8 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                       personalInfo: { fields: [newNameField, ...profileFields] }
                     })
                   }}
+                  className="border-cyan-500/30 hover:bg-cyan-500/10 hover:border-cyan-500/40
+                             hover:scale-105 transition-all duration-200"
                 >
                   <HugeiconsIcon icon={Plus} size={14} className="mr-2" />
                   Add Name Field
@@ -460,9 +472,11 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                   onDragOver={handleFieldDragOver}
                   onDrop={(e) => handleFieldDrop(e, field.id)}
                   onDragEnd={handleFieldDragEnd}
-                  className={`space-y-2 border rounded-lg p-3 transition-all ${
-                    draggedFieldId === field.id ? 'opacity-50 ring-2 ring-primary' : ''
-                  }`}
+                  className={`space-y-2 border rounded-lg p-3
+                             bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                             hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10
+                             transition-all duration-200
+                             ${draggedFieldId === field.id ? 'opacity-50 ring-2 ring-cyan-500/50' : ''}`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="cursor-grab active:cursor-grabbing shrink-0">
@@ -472,7 +486,11 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                       type="text"
                       value={field.label}
                       onChange={(e) => handleFieldChange(field.id, { label: e.target.value })}
-                      className="text-sm font-medium px-2 py-1 border rounded-md bg-background flex-1"
+                      className="text-sm font-medium px-2 py-1 border rounded-md
+                                 bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                                 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                                 text-white flex-1
+                                 transition-all duration-200"
                       placeholder="Field label"
                     />
                     <Button
@@ -482,26 +500,33 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                         const updatedFields = profileFields.filter(f => f.id !== field.id)
                         onChange({ ...cvData, personalInfo: { fields: updatedFields } })
                       }}
-                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive shrink-0"
+                      className="h-11 w-11 min-h-11 min-w-11 p-0 text-muted-foreground hover:text-destructive
+                                 hover:bg-destructive/20 hover:scale-110 shrink-0
+                                 transition-all duration-200"
                     >
-                      <HugeiconsIcon icon={Trash2} size={14} />
+                      <HugeiconsIcon icon={Trash2} size={16} />
                     </Button>
                   </div>
                   <input
                     type={field.type}
                     value={field.value}
                     onChange={(e) => handleFieldChange(field.id, { value: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md text-sm"
+                    className="w-full px-3 py-2 border rounded-md text-sm
+                               bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                               focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                               text-white placeholder:text-slate-500
+                               transition-all duration-200"
                     placeholder={field.label}
                   />
                 </div>
               ))}
 
             {/* Social Links Section - expandable with add/remove */}
-            <div className="border rounded-md overflow-hidden">
+            <div className="border border-cyan-500/20 rounded-md overflow-hidden bg-slate-900/30 backdrop-blur-sm">
               <button
                 onClick={() => toggleField('socials')}
-                className="w-full flex items-center gap-2 p-2 bg-background hover:bg-muted/50 transition-colors text-left"
+                className="w-full flex items-center gap-2 p-2 bg-slate-900/40 hover:bg-slate-900/60
+                           hover:scale-[1.01] transition-all duration-200 text-left"
               >
                 <HugeiconsIcon icon={expandedFields.has('socials') ? ChevronDown : ChevronRight} size={14} />
                 <span className="text-sm font-medium">Social Links</span>
@@ -516,7 +541,7 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                 </span>
               </button>
               {expandedFields.has('socials') && (
-                <div className="p-3 border-t space-y-3">
+                <div className="p-3 border-t border-cyan-500/20 space-y-3">
                   {otherFields
                     .filter(f =>
                       f.label.toLowerCase().includes('linkedin') ||
@@ -533,9 +558,11 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                         onDragOver={handleFieldDragOver}
                         onDrop={(e) => handleFieldDrop(e, field.id)}
                         onDragEnd={handleFieldDragEnd}
-                        className={`space-y-2 border rounded-md p-2 transition-all ${
-                          draggedFieldId === field.id ? 'opacity-50 ring-2 ring-primary' : ''
-                        }`}
+                        className={`space-y-2 border rounded-md p-2
+                                   bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                                   hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10
+                                   transition-all duration-200
+                                   ${draggedFieldId === field.id ? 'opacity-50 ring-2 ring-cyan-500/50' : ''}`}
                       >
                         <div className="flex items-center justify-between gap-2">
                           <div className="cursor-grab active:cursor-grabbing shrink-0">
@@ -545,7 +572,11 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                             type="text"
                             value={field.label}
                             onChange={(e) => handleFieldChange(field.id, { label: e.target.value })}
-                            className="text-xs font-medium px-2 py-1 border rounded-md bg-background flex-1"
+                            className="text-xs font-medium px-2 py-1 border rounded-md
+                                       bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                                       focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                                       text-white flex-1
+                                       transition-all duration-200"
                             placeholder="Link label"
                           />
                           <Button
@@ -555,16 +586,22 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                               const updatedFields = profileFields.filter(f => f.id !== field.id)
                               onChange({ ...cvData, personalInfo: { fields: updatedFields } })
                             }}
-                            className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive shrink-0"
+                            className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive
+                                       hover:bg-destructive/20 hover:scale-110 shrink-0
+                                       transition-all duration-200"
                           >
-                            <HugeiconsIcon icon={Trash2} size={14} />
+                            <HugeiconsIcon icon={Trash2} size={16} />
                           </Button>
                         </div>
                         <input
                           type={field.type}
                           value={field.value}
                           onChange={(e) => handleFieldChange(field.id, { value: e.target.value })}
-                          className="w-full px-3 py-2 border rounded-md text-sm"
+                          className="w-full px-3 py-2 border rounded-md text-sm
+                                     bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                                     focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                                     text-white placeholder:text-slate-500
+                                     transition-all duration-200"
                           placeholder={field.label}
                         />
                       </div>
@@ -573,7 +610,9 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full"
+                    className="w-full border-cyan-500/30 hover:bg-cyan-500/10
+                               hover:border-cyan-500/40 hover:scale-105
+                               transition-all duration-200"
                     onClick={() => {
                       const socialLinks = ['LinkedIn', 'GitHub', 'Twitter', 'Website', 'Portfolio']
                       const existingSocials = otherFields.filter(f =>
@@ -624,9 +663,8 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                   onDragOver={handleFieldDragOver}
                   onDrop={(e) => handleFieldDrop(e, field.id)}
                   onDragEnd={handleFieldDragEnd}
-                  className={`space-y-2 border-t pt-3 transition-all ${
-                    draggedFieldId === field.id ? 'opacity-50 ring-2 ring-primary' : ''
-                  }`}
+                  className={`space-y-2 border-t border-cyan-500/20 pt-3 transition-all
+                             ${draggedFieldId === field.id ? 'opacity-50 ring-2 ring-cyan-500/50' : ''}`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="cursor-grab active:cursor-grabbing shrink-0">
@@ -636,7 +674,11 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                       type="text"
                       value={field.label}
                       onChange={(e) => handleFieldChange(field.id, { label: e.target.value })}
-                      className="text-sm font-semibold px-2 py-1 border rounded-md bg-background flex-1"
+                      className="text-sm font-semibold px-2 py-1 border rounded-md
+                                 bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                                 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                                 text-white flex-1
+                                 transition-all duration-200"
                       placeholder="Section title"
                     />
                     <Button
@@ -646,15 +688,21 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                         const updatedFields = profileFields.filter(f => f.id !== field.id)
                         onChange({ ...cvData, personalInfo: { fields: updatedFields } })
                       }}
-                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive shrink-0"
+                      className="h-11 w-11 min-h-11 min-w-11 p-0 text-muted-foreground hover:text-destructive
+                                 hover:bg-destructive/20 hover:scale-110 shrink-0
+                                 transition-all duration-200"
                     >
-                      <HugeiconsIcon icon={Trash2} size={14} />
+                      <HugeiconsIcon icon={Trash2} size={16} />
                     </Button>
                   </div>
                   <textarea
                     value={field.value}
                     onChange={(e) => handleFieldChange(field.id, { value: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md text-sm min-h-30 focus:ring-2 focus:ring-primary focus:border-primary"
+                    className="w-full px-3 py-2 border rounded-md text-sm min-h-30
+                               bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                               focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                               text-white placeholder:text-slate-500
+                               transition-all duration-200"
                     placeholder={`Write your ${field.label.toLowerCase()} here...`}
                   />
                   <p className="text-xs text-muted-foreground">
@@ -665,7 +713,9 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
 
             <Button
               variant="outline"
-              className="w-full"
+              className="w-full border-cyan-500/30 hover:bg-cyan-500/10
+                         hover:border-cyan-500/40 hover:scale-105
+                         transition-all duration-200"
               onClick={() => {
                 const newField: ProfileField = {
                   id: `custom-${fieldIdCounter}`,

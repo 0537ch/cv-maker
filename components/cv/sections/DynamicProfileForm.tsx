@@ -62,7 +62,12 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
 
   const renderField = (field: ProfileField, index: number) => {
     return (
-      <div key={field.id} className="flex items-start gap-2 group border p-4 rounded-lg">
+      <div key={field.id}
+           className="flex items-start gap-2 group
+                  border border-cyan-500/20 p-4 rounded-lg
+                  bg-slate-900/40 backdrop-blur-sm
+                  hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-500/10
+                  transition-all duration-200">
         <div className="flex flex-col gap-1 mt-2">
           <HugeiconsIcon
             icon={GripVertical}
@@ -70,21 +75,29 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
           />
         </div>
         <div className="flex-1 space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label>Field Label</Label>
+              <Label className="text-slate-300">Field Label</Label>
               <Input
                 value={field.label}
                 onChange={(e) => updateField(field.id, { label: e.target.value })}
                 placeholder="e.g., Email, Phone, GitHub"
+                className="bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                           focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                           text-white placeholder:text-slate-500
+                           transition-all duration-200"
               />
             </div>
             <div className="space-y-1">
-              <Label>Field Type</Label>
+              <Label className="text-slate-300">Field Type</Label>
               <select
                 value={field.type}
                 onChange={(e) => updateField(field.id, { type: e.target.value as ProfileField['type'] })}
-                className="w-full h-9 px-3 rounded-md border bg-background text-sm"
+                className="w-full h-9 px-3 rounded-md border
+                           bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                           focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                           text-white
+                           transition-all duration-200"
               >
                 <option value="text">Text</option>
                 <option value="email">Email</option>
@@ -98,14 +111,18 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
           </div>
 
           <div className="space-y-1">
-            <Label>Value</Label>
+            <Label className="text-slate-300">Value</Label>
             {field.type === 'textarea' ? (
               <Textarea
                 value={field.value}
                 onChange={(e) => updateField(field.id, { value: e.target.value })}
                 placeholder={`Enter ${field.label.toLowerCase()}`}
                 rows={3}
-                className="resize-none"
+                className="resize-none bg-slate-900/40 backdrop-blur-sm
+                           border-cyan-500/20 focus:border-cyan-500/50
+                           focus:ring-2 focus:ring-cyan-500/20
+                           text-white placeholder:text-slate-500
+                           transition-all duration-200"
               />
             ) : (
               <Input
@@ -113,18 +130,22 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
                 value={field.value}
                 onChange={(e) => updateField(field.id, { value: e.target.value })}
                 placeholder={`Enter ${field.label.toLowerCase()}`}
+                className="bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                           focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                           text-white placeholder:text-slate-500
+                           transition-all duration-200"
               />
             )}
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <label className="flex items-center gap-2 text-sm">
+              <label className="flex items-center gap-2 text-sm text-slate-300">
                 <input
                   type="checkbox"
                   checked={field.required}
                   onChange={(e) => updateField(field.id, { required: e.target.checked })}
-                  className="h-4 w-4"
+                  className="h-4 w-4 accent-cyan-500"
                 />
                 Required
               </label>
@@ -135,6 +156,7 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
                 size="sm"
                 onClick={() => moveField(field.id, 'up')}
                 disabled={index === 0}
+                className="min-h-[44px] min-w-[44px] hover:bg-cyan-500/10 hover:scale-105 transition-all duration-200"
               >
                 ↑
               </Button>
@@ -143,13 +165,16 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
                 size="sm"
                 onClick={() => moveField(field.id, 'down')}
                 disabled={index === fields.length - 1}
+                className="min-h-[44px] min-w-[44px] hover:bg-cyan-500/10 hover:scale-105 transition-all duration-200"
               >
                 ↓
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                className="min-h-[44px] min-w-[44px] text-destructive hover:text-destructive
+                           hover:bg-destructive/20 hover:scale-105
+                           transition-all duration-200"
                 onClick={() => removeField(field.id)}
               >
                 <HugeiconsIcon icon={Trash2} className="h-4 w-4 mr-1" />
@@ -166,13 +191,17 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
     <div className="space-y-6">
       {/* Section Header Customization */}
       {onHeaderChange && (
-        <div className="space-y-2 pb-4 border-b">
-          <Label htmlFor="sectionHeader">Section Header</Label>
+        <div className="space-y-2 pb-4 border-b border-cyan-500/20">
+          <Label htmlFor="sectionHeader" className="text-slate-300">Section Header</Label>
           <Input
             id="sectionHeader"
             value={sectionHeader || 'Profile'}
             onChange={(e) => onHeaderChange(e.target.value)}
             placeholder="Profile"
+            className="bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                       focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
+                       text-white placeholder:text-slate-500
+                       transition-all duration-200"
           />
           <p className="text-xs text-muted-foreground">
             Customize the section title that appears on your CV
@@ -183,7 +212,9 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
       {/* Add Field Button */}
       <Button
         variant="outline"
-        className="w-full"
+        className="w-full border-cyan-500/30 hover:bg-cyan-500/10
+                   hover:border-cyan-500/40 hover:scale-105
+                   transition-all duration-200"
         onClick={addField}
       >
         <HugeiconsIcon icon={Plus} className="h-4 w-4 mr-2" />
@@ -193,7 +224,9 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
       {/* Fields List */}
       <div className="space-y-3">
         {fields.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground border-2 border-dashed rounded-lg">
+          <div className="text-center py-8 text-muted-foreground
+                          border-2 border-dashed border-cyan-500/20 rounded-lg
+                          bg-slate-900/20 backdrop-blur-sm">
             <p className="text-sm">No fields yet. Click &quot;Add Field&quot; to create your first field.</p>
           </div>
         ) : (

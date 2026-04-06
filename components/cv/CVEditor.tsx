@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { CV, CVData, CVSection, FieldConfig } from '@/types/cv'
 import { CVPreview } from './CVPreview'
 import { CollapsibleTreeEditor } from './CollapsibleTreeEditor'
@@ -87,53 +88,108 @@ export function CVEditor({ cv }: { cv: CV }) {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col lg:flex-row h-dvh overflow-hidden"
+    >
       {/* Editor Panel - Left */}
-      <div className="w-full lg:w-1/3 border-r overflow-hidden flex flex-col bg-background">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="w-full lg:w-1/3 border-r border-cyan-500/20 overflow-hidden flex flex-col bg-slate-900/60 backdrop-blur-xl relative group"
+      >
+        {/* Gradient overlay on hover */}
+        <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+
         {/* Header */}
-        <div className="p-6 border-b">
-          <div className="flex items-center justify-between">
+        <div className="relative p-6 border-b border-cyan-500/20">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="flex items-center justify-between"
+          >
             <Button
               variant="ghost"
               onClick={() => router.push('/dashboard')}
+              className="hover:bg-cyan-500/10 hover:text-cyan-400 hover:scale-105 transition-all duration-200"
             >
               ← Back
             </Button>
             <div className="flex items-center gap-4">
-              <h1 className="text-lg font-bold truncate max-w-50">{cv.title}</h1>
-              {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
+              <h1 className="text-lg font-bold truncate max-w-50 bg-linear-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">{cv.title}</h1>
+              {saving && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-2 text-xs text-cyan-400"
+                >
+                  <div className="w-3 h-3 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+                  Saving...
+                </motion.div>
+              )}
             </div>
-          </div>
-          <div className="flex items-center gap-2 mt-4">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.25 }}
+            className="flex items-center gap-2 mt-4"
+          >
             <Button
               variant="outline"
               size="sm"
               onClick={() => setShowAddSectionModal(true)}
-              className="flex-1"
+              className="flex-1 border-cyan-500/30 hover:bg-cyan-500/10 hover:border-cyan-400/50 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-200"
             >
               + Add Section
             </Button>
-          </div>
+          </motion.div>
 
           {saveError && (
-            <div className="bg-destructive/10 text-destructive px-4 py-2 rounded-md text-sm mt-4">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-2 rounded-md text-sm mt-4 backdrop-blur-sm"
+            >
               {saveError}
-            </div>
+            </motion.div>
           )}
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="relative flex-1 overflow-y-auto p-6"
+        >
           <CollapsibleTreeEditor cvData={cvData} onChange={setCvData} />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Preview Panel - Right (A4-sized) */}
-      <div className="flex-1 overflow-hidden flex flex-col bg-muted/30">
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="flex-1 overflow-hidden flex flex-col bg-slate-900/60 backdrop-blur-xl relative"
+      >
+        {/* Ambient glow behind preview */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-200 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+
         {/* Header */}
-        <div className="p-8 border-b">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Preview</h2>
+        <div className="relative p-8 border-b border-cyan-500/20">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="flex items-center justify-between"
+          >
+            <h2 className="text-lg font-semibold bg-linear-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">Preview</h2>
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -141,28 +197,34 @@ export function CVEditor({ cv }: { cv: CV }) {
                 onClick={handleExportPDF}
                 loading={exportLoading}
                 loadingText="Exporting PDF..."
+                className="border-cyan-500/30 hover:bg-cyan-500/10 hover:border-cyan-400/50 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-200"
               >
                 Export PDF
               </Button>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-8">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.35 }}
+          className="relative flex-1 overflow-auto p-4 sm:p-8 [-webkit-overflow-scrolling:touch]"
+        >
           {/* A4 Preview Container */}
-          <div className="flex justify-center">
-            <div className="bg-white shadow-lg" style={{
-              width: '210mm',
-              minHeight: '297mm',
-              transform: 'scale(0.85)',
-              transformOrigin: 'top center'
-            }}>
+          <div className="flex justify-center">                                                                                                    
+                  <div className="bg-white shadow-xl shadow-cyan-500/10" style={{                                                                        
+                    width: '210mm',                                                                                                                      
+                    minHeight: '297mm',                                                                                                                  
+                    transform: 'scale(0.85)',                                                                                                            
+                    transformOrigin: 'top center'                                                                                                        
+                 }}>     
               <CVPreview data={cvData} templateId={cv.template_id} />
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Add Section Modal */}
       <AddSectionModal
@@ -170,6 +232,6 @@ export function CVEditor({ cv }: { cv: CV }) {
         onClose={() => setShowAddSectionModal(false)}
         onAddSection={handleAddSection}
       />
-    </div>
+    </motion.div>
   )
 }

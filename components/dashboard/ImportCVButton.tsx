@@ -83,6 +83,7 @@ export function ImportCVButton() {
         variant="outline"
         loading={loading}
         loadingText="Importing..."
+        className="group px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-teal-500/10 hover:from-cyan-500/20 hover:to-teal-500/20 text-white rounded-lg font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25 border border-cyan-500/30 hover:border-cyan-400/50 flex items-center gap-2"
       >
         Import JSON
       </Button>

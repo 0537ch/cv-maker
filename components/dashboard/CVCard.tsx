@@ -29,11 +29,10 @@ export function CVCard({ cv }: { cv: CV }) {
 
   const handleEdit = async () => {
     setEditLoading(true)
-    try {
-      router.push(`/editor/${cv.id}`)
-    } finally {
-      setEditLoading(false)
-    }
+    router.push(`/editor/${cv.id}`)
+    // Add minimal delay to show spinner for better UX
+    await new Promise(resolve => setTimeout(resolve, 300))
+    setEditLoading(false)
   }
 
   const handleToggleFavorite = async () => {
@@ -46,8 +45,11 @@ export function CVCard({ cv }: { cv: CV }) {
   }
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader>
+    <Card className="relative overflow-hidden bg-slate-900/60 backdrop-blur-xl border border-cyan-500/20 hover:border-cyan-400/40 hover:bg-slate-900/70 transition-all duration-200 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/10 group">
+      {/* Gradient overlay on hover */}
+      <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+
+      <CardHeader className="relative">
         <CardTitle className="flex items-center justify-between">
           {cv.title}
           {cv.is_favorite && (
@@ -55,7 +57,7 @@ export function CVCard({ cv }: { cv: CV }) {
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative">
         <p className="text-sm text-muted-foreground">
           Template: {cv.template_id}
         </p>
@@ -63,7 +65,7 @@ export function CVCard({ cv }: { cv: CV }) {
           Last updated: {new Date(cv.updated_at).toLocaleDateString()}
         </p>
       </CardContent>
-      <CardFooter className="gap-2">
+      <CardFooter className="gap-2 relative">
         <Button
           onClick={handleEdit}
           className="flex-1"
@@ -76,6 +78,7 @@ export function CVCard({ cv }: { cv: CV }) {
           variant="outline"
           size="icon"
           onClick={handleToggleFavorite}
+          className="hover:bg-cyan-500/10"
         >
           <HugeiconsIcon icon={Star} className={`h-4 w-4 ${cv.is_favorite ? 'fill-yellow-500 text-yellow-500' : ''}`} />
         </Button>

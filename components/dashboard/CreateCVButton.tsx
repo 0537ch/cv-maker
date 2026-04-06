@@ -31,8 +31,13 @@ export function CreateCVButton() {
   }
 
   return (
-    <Button onClick={handleCreate} loading={loading} loadingText="Creating CV...">
-      <HugeiconsIcon icon={Square} className="h-4 w-4 mr-2" />
+    <Button
+      onClick={handleCreate}
+      loading={loading}
+      loadingText="Creating CV..."
+      className="group px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white rounded-lg font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25 flex items-center gap-2"
+    >
+      <HugeiconsIcon icon={Square} className="h-4 w-4" />
       New CV
     </Button>
   )

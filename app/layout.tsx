@@ -3,8 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google"
 import { LayoutGroup } from 'framer-motion'
 
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 const geistHeading = Geist({subsets:['latin'],variable:'--font-heading'});
 
@@ -28,12 +27,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", inter.variable, geistHeading.variable)}
+      className={cn("dark antialiased", fontMono.variable, "font-sans", inter.variable, geistHeading.variable)}
     >
-      <body>
+      <body className="bg-slate-950">
         <LayoutGroup>
-          <ThemeProvider>{children}</ThemeProvider>
+          {children}
         </LayoutGroup>
       </body>
     </html>

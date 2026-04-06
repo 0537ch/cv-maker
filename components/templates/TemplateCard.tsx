@@ -180,28 +180,35 @@ export function TemplateCard({ template }: { template: Template }) {
   }
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader>
-        <CardTitle>{template.name}</CardTitle>
+    <Card className="relative overflow-hidden bg-slate-900/60 backdrop-blur-xl border border-cyan-500/20 hover:border-cyan-400/40 hover:bg-slate-900/70 transition-all duration-200 hover:scale-[1.02] hover:shadow-xl hover:shadow-cyan-500/10 group">
+      {/* Gradient overlay on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+
+      <CardHeader className="relative">
+        <CardTitle className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">{template.name}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative">
         <p className="text-sm text-muted-foreground">
           {template.description}
         </p>
         <div className="mt-2">
-          <span className="text-xs bg-secondary px-2 py-1 rounded">
+          <span className="text-xs bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-2 py-1 rounded">
             {template.category}
           </span>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="relative">
         <div className="w-full space-y-2">
           {error && (
-            <div className="text-xs text-destructive bg-destructive/10 p-2 rounded">
+            <div className="text-xs text-destructive bg-destructive/10 border border-destructive/20 p-2 rounded backdrop-blur-sm">
               {error}
             </div>
           )}
-          <Button onClick={handleSelect} disabled={loading} className="w-full">
+          <Button
+            onClick={handleSelect}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-200"
+          >
             {loading ? 'Creating...' : 'Use Template'}
           </Button>
         </div>

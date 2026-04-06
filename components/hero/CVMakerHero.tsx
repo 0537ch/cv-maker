@@ -5,10 +5,12 @@ import { ArrowRight, Sparkles, Zap, Download } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useShaderBackground } from './hooks/useShaderBackground'
 import { FeatureCard } from './FeatureCard'
+import { useState } from 'react'
 
 export function CVMakerHero() {
   const canvasRef = useShaderBackground()
   const router = useRouter()
+  const [loginLoading, setLoginLoading] = useState(false)
 
   const features = [
     {
@@ -67,11 +69,26 @@ export function CVMakerHero() {
             >
               <motion.button
                 layoutId="login-button"
-                onClick={() => router.push('/login')}
-                className="group px-6 py-3 bg-linear-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25 flex items-center justify-center gap-2"
+                onClick={async () => {
+                  setLoginLoading(true)
+                  router.push('/login')
+                  await new Promise(resolve => setTimeout(resolve, 300))
+                  setLoginLoading(false)
+                }}
+                disabled={loginLoading}
+                className="group px-6 py-3 bg-linear-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/25 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                Login
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {loginLoading ? (
+                  <>
+                    <ArrowRight className="w-4 h-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  <>
+                    Login
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </motion.button>
             </motion.div>
           </div>

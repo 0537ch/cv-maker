@@ -15,12 +15,12 @@ export function DashboardContent({ cvs }: { cvs: CV[] }) {
       className="space-y-6"
     >
       {/* Header with gradient text */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
             My CVs
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
             Manage and edit your CVs
           </p>
         </div>
@@ -58,14 +58,14 @@ export function DashboardContent({ cvs }: { cvs: CV[] }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="relative bg-slate-900/60 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-12 text-center"
+          className="relative bg-slate-900/60 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-6 sm:p-12 text-center"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-teal-500/10 rounded-2xl pointer-events-none" />
           <div className="relative">
-            <p className="text-muted-foreground mb-6">
+            <p className="text-muted-foreground mb-6 text-sm sm:text-base">
               You haven&apos;t created any CVs yet
             </p>
-            <div className="flex gap-2 justify-center">
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
               <ImportCVButton />
               <CreateCVButton />
             </div>

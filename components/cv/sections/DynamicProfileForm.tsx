@@ -82,7 +82,7 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
                 value={field.label}
                 onChange={(e) => updateField(field.id, { label: e.target.value })}
                 placeholder="e.g., Email, Phone, GitHub"
-                className="bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                className="min-h-12 bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
                            focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
                            text-white placeholder:text-slate-500
                            transition-all duration-200"
@@ -93,7 +93,7 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
               <select
                 value={field.type}
                 onChange={(e) => updateField(field.id, { type: e.target.value as ProfileField['type'] })}
-                className="w-full h-9 px-3 rounded-md border
+                className="min-h-12 w-full px-3 rounded-md border
                            bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
                            focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
                            text-white
@@ -118,7 +118,7 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
                 onChange={(e) => updateField(field.id, { value: e.target.value })}
                 placeholder={`Enter ${field.label.toLowerCase()}`}
                 rows={3}
-                className="resize-none bg-slate-900/40 backdrop-blur-sm
+                className="min-h-32 resize-none bg-slate-900/40 backdrop-blur-sm
                            border-cyan-500/20 focus:border-cyan-500/50
                            focus:ring-2 focus:ring-cyan-500/20
                            text-white placeholder:text-slate-500
@@ -130,7 +130,7 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
                 value={field.value}
                 onChange={(e) => updateField(field.id, { value: e.target.value })}
                 placeholder={`Enter ${field.label.toLowerCase()}`}
-                className="bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+                className="min-h-12 bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
                            focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
                            text-white placeholder:text-slate-500
                            transition-all duration-200"
@@ -198,7 +198,7 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
             value={sectionHeader || 'Profile'}
             onChange={(e) => onHeaderChange(e.target.value)}
             placeholder="Profile"
-            className="bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
+            className="min-h-12 bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
                        focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20
                        text-white placeholder:text-slate-500
                        transition-all duration-200"

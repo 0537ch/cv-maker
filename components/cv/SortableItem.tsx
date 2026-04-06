@@ -40,11 +40,11 @@ export function SortableItem({ id, label, isSelected, onSelect }: SortableItemPr
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing hover:bg-muted rounded p-1 opacity-50 hover:opacity-100 transition-opacity"
+        className="cursor-grab active:cursor-grabbing hover:bg-muted rounded p-1 opacity-50 hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
         aria-label="Drag to reorder item"
         onClick={(e) => e.stopPropagation()}
       >
-        <HugeiconsIcon icon={GripVertical} className="h-4 w-4 text-muted-foreground" />
+        <HugeiconsIcon icon={GripVertical} className="h-5 w-5 text-muted-foreground" />
       </div>
 
       {/* Label */}

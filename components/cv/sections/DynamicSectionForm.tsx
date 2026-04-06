@@ -92,7 +92,7 @@ export function DynamicSectionForm({
           type="text"
           value={sectionHeader || ''}
           onChange={(e) => onHeaderChange(e.target.value)}
-          className="text-lg font-bold border-b-2 border-primary pb-1 w-full bg-transparent outline-none"
+          className="min-h-12 text-lg font-bold border-b-2 border-primary pb-1 w-full bg-transparent outline-none"
           placeholder="Section Header"
         />
       )}
@@ -101,9 +101,9 @@ export function DynamicSectionForm({
         <div key={item.id as string} className="border rounded-lg overflow-hidden bg-card">
           <div className="flex items-center gap-2 p-3 bg-muted/30">
             <HugeiconsIcon icon={GripVertical} size={14} className="text-muted-foreground" />
-            <button 
+            <button
               onClick={() => toggleExpanded(item.id as string)}
-              className="flex-1 text-left font-medium flex items-center gap-2"
+              className="min-h-11 min-w-11 flex-1 text-left font-medium flex items-center gap-2"
             >
               <HugeiconsIcon icon={expandedIds.has(item.id as string) ? ChevronDown : ChevronUp} size={16} />
               {String(item[fieldConfig[0]?.id] || 'Untitled Item')}
@@ -111,7 +111,7 @@ export function DynamicSectionForm({
             <Button
               variant="ghost" size="sm"
               onClick={() => onChange(data.filter(i => i.id !== item.id))}
-              className="text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
+              className="min-h-11 min-w-11 text-destructive hover:bg-destructive/10 p-0"
             >
               <HugeiconsIcon icon={Trash2} size={14} />
             </Button>
@@ -126,7 +126,7 @@ export function DynamicSectionForm({
                     type={field.type === 'textarea' ? 'text' : field.type}
                     value={String(item[field.id] || '')}
                     onChange={(e) => updateItem(item.id as string, field.id, e.target.value)}
-                    className="w-full px-3 py-2 border rounded-md text-sm"
+                    className="min-h-12 w-full px-3 py-2 border rounded-md text-sm"
                     placeholder={field.label}
                   />
                 </div>
@@ -136,7 +136,7 @@ export function DynamicSectionForm({
         </div>
       ))}
 
-      <Button onClick={addItem} className="w-full" variant="outline">
+      <Button onClick={addItem} className="min-h-11 min-w-11 w-full" variant="outline">
         <HugeiconsIcon icon={Plus} size={16} className="mr-2" /> Add Item
       </Button>
     </div>

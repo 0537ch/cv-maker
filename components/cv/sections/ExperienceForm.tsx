@@ -156,6 +156,7 @@ export function ExperienceForm({
             value={sectionHeader || defaultHeader}
             onChange={(e) => onHeaderChange(e.target.value)}
             placeholder="Professional Experience"
+            className="min-h-12"
           />
           <p className="text-xs text-muted-foreground">
             Customize the section title that appears on your CV
@@ -179,12 +180,12 @@ export function ExperienceForm({
           >
             {/* Header - Always Visible */}
             <div className="flex items-center gap-2 p-3 bg-background hover:bg-muted/50 transition-colors">
-              <div className="cursor-grab active:cursor-grabbing">
+              <div className="cursor-grab active:cursor-grabbing min-h-11 min-w-11 flex items-center justify-center">
                 <HugeiconsIcon icon={GripVertical} size={16} className="text-muted-foreground" />
               </div>
               <button
                 onClick={() => toggleExpand(exp.id)}
-                className="flex items-center gap-2 flex-1 text-left"
+                className="flex items-center gap-2 flex-1 text-left min-h-11"
               >
                 <HugeiconsIcon
                   icon={expandedItems.has(exp.id) ? ChevronDown : ChevronRight}
@@ -228,6 +229,7 @@ export function ExperienceForm({
                           value={editForm.company}
                           onChange={(e) => setEditForm({ ...editForm, company: e.target.value })}
                           placeholder="Company name"
+                          className="min-h-12"
                         />
                       </div>
                       <div className="space-y-2">
@@ -236,6 +238,7 @@ export function ExperienceForm({
                           value={editForm.position}
                           onChange={(e) => setEditForm({ ...editForm, position: e.target.value })}
                           placeholder="Job title"
+                          className="min-h-12"
                         />
                       </div>
                     </div>
@@ -247,6 +250,7 @@ export function ExperienceForm({
                           type="date"
                           value={editForm.startDate}
                           onChange={(e) => setEditForm({ ...editForm, startDate: e.target.value })}
+                          className="min-h-12"
                         />
                       </div>
                       <div className="space-y-2">
@@ -256,6 +260,7 @@ export function ExperienceForm({
                           value={editForm.endDate}
                           onChange={(e) => setEditForm({ ...editForm, endDate: e.target.value })}
                           disabled={editForm.current}
+                          className="min-h-12"
                         />
                       </div>
                     </div>
@@ -278,14 +283,15 @@ export function ExperienceForm({
                         onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                         placeholder="Describe your responsibilities and achievements..."
                         rows={4}
+                        className="min-h-32"
                       />
                     </div>
 
                     <div className="flex gap-2">
-                      <Button onClick={saveEdit} size="sm">
+                      <Button onClick={saveEdit} className="min-h-11 min-w-11">
                         Save
                       </Button>
-                      <Button onClick={cancelEdit} variant="outline" size="sm">
+                      <Button onClick={cancelEdit} variant="outline" className="min-h-11 min-w-11">
                         Cancel
                       </Button>
                     </div>
@@ -337,6 +343,7 @@ export function ExperienceForm({
                 value={newExp.company}
                 onChange={(e) => setNewExp({ ...newExp, company: e.target.value })}
                 placeholder="Company name"
+                className="min-h-12"
               />
             </div>
             <div className="space-y-2">
@@ -346,6 +353,7 @@ export function ExperienceForm({
                 value={newExp.position}
                 onChange={(e) => setNewExp({ ...newExp, position: e.target.value })}
                 placeholder="Job title"
+                className="min-h-12"
               />
             </div>
           </div>
@@ -358,6 +366,7 @@ export function ExperienceForm({
                 type="date"
                 value={newExp.startDate}
                 onChange={(e) => setNewExp({ ...newExp, startDate: e.target.value })}
+                className="min-h-12"
               />
             </div>
             <div className="space-y-2">
@@ -368,6 +377,7 @@ export function ExperienceForm({
                 value={newExp.endDate}
                 onChange={(e) => setNewExp({ ...newExp, endDate: e.target.value })}
                 disabled={newExp.current}
+                className="min-h-12"
               />
             </div>
           </div>
@@ -391,10 +401,11 @@ export function ExperienceForm({
               onChange={(e) => setNewExp({ ...newExp, description: e.target.value })}
               placeholder="Describe your responsibilities and achievements..."
               rows={4}
+              className="min-h-32"
             />
           </div>
 
-          <Button onClick={handleAdd} className="w-full">
+          <Button onClick={handleAdd} className="w-full min-h-11">
             + Add Experience
           </Button>
         </div>

@@ -207,7 +207,7 @@ export function TemplateCard({ template }: { template: Template }) {
           <Button
             onClick={handleSelect}
             disabled={loading}
-            className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-200"
+            className="w-full min-h-11 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-200"
           >
             {loading ? 'Creating...' : 'Use Template'}
           </Button>

@@ -121,6 +121,7 @@ export function SkillsForm({
             value={sectionHeader || defaultHeader}
             onChange={(e) => onHeaderChange(e.target.value)}
             placeholder="Core Competencies"
+            className="min-h-12"
           />
           <p className="text-xs text-muted-foreground">
             Customize the section title that appears on your CV
@@ -151,6 +152,7 @@ export function SkillsForm({
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                     placeholder="JavaScript, React, Python..."
+                    className="min-h-12"
                   />
                 </div>
 
@@ -160,6 +162,7 @@ export function SkillsForm({
                     value={editForm.category}
                     onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
                     placeholder="Programming, Design, Language..."
+                    className="min-h-12"
                   />
                 </div>
 
@@ -171,7 +174,7 @@ export function SkillsForm({
                         key={level}
                         type="button"
                         variant={editForm.level === level ? 'default' : 'outline'}
-                        size="sm"
+                        className="min-h-11 min-w-11"
                         onClick={() => setEditForm({ ...editForm, level: level as Skill['level'] })}
                       >
                         {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -181,10 +184,10 @@ export function SkillsForm({
                 </div>
 
                 <div className="flex gap-2">
-                  <Button onClick={saveEdit} size="sm">
+                  <Button onClick={saveEdit} className="min-h-11 min-w-11">
                     Save
                   </Button>
-                  <Button onClick={cancelEdit} variant="outline" size="sm">
+                  <Button onClick={cancelEdit} variant="outline" className="min-h-11 min-w-11">
                     Cancel
                   </Button>
                 </div>
@@ -192,7 +195,7 @@ export function SkillsForm({
             ) : (
               // View Mode
               <div className="flex items-center gap-2 p-3 bg-background hover:bg-muted/50 transition-colors">
-                <div className="cursor-grab active:cursor-grabbing">
+                <div className="cursor-grab active:cursor-grabbing min-h-11 min-w-11 flex items-center justify-center">
                   <HugeiconsIcon icon={GripVertical} size={16} className="text-muted-foreground" />
                 </div>
                 <div className="flex items-center gap-2 flex-1">
@@ -239,6 +242,7 @@ export function SkillsForm({
               value={newSkill.name}
               onChange={(e) => setNewSkill({ ...newSkill, name: e.target.value })}
               placeholder="JavaScript, React, Python..."
+              className="min-h-12"
             />
           </div>
 
@@ -249,6 +253,7 @@ export function SkillsForm({
               value={newSkill.category}
               onChange={(e) => setNewSkill({ ...newSkill, category: e.target.value })}
               placeholder="Programming, Design, Language..."
+              className="min-h-12"
             />
           </div>
 
@@ -260,6 +265,7 @@ export function SkillsForm({
                   key={level}
                   type="button"
                   variant={newSkill.level === level ? 'default' : 'outline'}
+                  className="min-h-11 min-w-11"
                   onClick={() => setNewSkill({ ...newSkill, level: level as Skill['level'] })}
                 >
                   {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -268,7 +274,7 @@ export function SkillsForm({
             </div>
           </div>
 
-          <Button onClick={handleAdd} className="w-full">
+          <Button onClick={handleAdd} className="w-full min-h-11">
             + Add Skill
           </Button>
         </div>

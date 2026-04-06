@@ -155,6 +155,7 @@ export function EducationForm({
             value={sectionHeader || defaultHeader}
             onChange={(e) => onHeaderChange(e.target.value)}
             placeholder="Education"
+            className="min-h-12"
           />
           <p className="text-xs text-muted-foreground">
             Customize the section title that appears on your CV
@@ -178,12 +179,12 @@ export function EducationForm({
           >
             {/* Header - Always Visible */}
             <div className="flex items-center gap-2 p-3 bg-background hover:bg-muted/50 transition-colors">
-              <div className="cursor-grab active:cursor-grabbing">
+              <div className="cursor-grab active:cursor-grabbing min-h-11 min-w-11 flex items-center justify-center">
                 <HugeiconsIcon icon={GripVertical} size={16} className="text-muted-foreground" />
               </div>
               <button
                 onClick={() => toggleExpand(edu.id)}
-                className="flex items-center gap-2 flex-1 text-left"
+                className="flex items-center gap-2 flex-1 text-left min-h-11"
               >
                 <HugeiconsIcon
                   icon={expandedItems.has(edu.id) ? ChevronDown : ChevronRight}
@@ -226,6 +227,7 @@ export function EducationForm({
                         value={editForm.institution}
                         onChange={(e) => setEditForm({ ...editForm, institution: e.target.value })}
                         placeholder="University name"
+                        className="min-h-12"
                       />
                     </div>
 
@@ -235,6 +237,7 @@ export function EducationForm({
                         value={editForm.degree}
                         onChange={(e) => setEditForm({ ...editForm, degree: e.target.value })}
                         placeholder="Bachelor's, Master's, PhD, etc."
+                        className="min-h-12"
                       />
                     </div>
 
@@ -244,6 +247,7 @@ export function EducationForm({
                         value={editForm.field}
                         onChange={(e) => setEditForm({ ...editForm, field: e.target.value })}
                         placeholder="Computer Science, Business, etc."
+                        className="min-h-12"
                       />
                     </div>
 
@@ -254,6 +258,7 @@ export function EducationForm({
                           type="date"
                           value={editForm.startDate}
                           onChange={(e) => setEditForm({ ...editForm, startDate: e.target.value })}
+                          className="min-h-12"
                         />
                       </div>
                       <div className="space-y-2">
@@ -262,6 +267,7 @@ export function EducationForm({
                           type="date"
                           value={editForm.endDate}
                           onChange={(e) => setEditForm({ ...editForm, endDate: e.target.value })}
+                          className="min-h-12"
                         />
                       </div>
                     </div>
@@ -272,14 +278,15 @@ export function EducationForm({
                         value={editForm.gpa}
                         onChange={(e) => setEditForm({ ...editForm, gpa: e.target.value })}
                         placeholder="3.5"
+                        className="min-h-12"
                       />
                     </div>
 
                     <div className="flex gap-2">
-                      <Button onClick={saveEdit} size="sm">
+                      <Button onClick={saveEdit} className="min-h-11 min-w-11">
                         Save
                       </Button>
-                      <Button onClick={cancelEdit} variant="outline" size="sm">
+                      <Button onClick={cancelEdit} variant="outline" className="min-h-11 min-w-11">
                         Cancel
                       </Button>
                     </div>
@@ -317,6 +324,7 @@ export function EducationForm({
               value={newEdu.institution}
               onChange={(e) => setNewEdu({ ...newEdu, institution: e.target.value })}
               placeholder="University name"
+              className="min-h-12"
             />
           </div>
 
@@ -327,6 +335,7 @@ export function EducationForm({
               value={newEdu.degree}
               onChange={(e) => setNewEdu({ ...newEdu, degree: e.target.value })}
               placeholder="Bachelor's, Master's, PhD, etc."
+              className="min-h-12"
             />
           </div>
 
@@ -337,6 +346,7 @@ export function EducationForm({
               value={newEdu.field}
               onChange={(e) => setNewEdu({ ...newEdu, field: e.target.value })}
               placeholder="Computer Science, Business, etc."
+              className="min-h-12"
             />
           </div>
 
@@ -348,6 +358,7 @@ export function EducationForm({
                 type="date"
                 value={newEdu.startDate}
                 onChange={(e) => setNewEdu({ ...newEdu, startDate: e.target.value })}
+                className="min-h-12"
               />
             </div>
             <div className="space-y-2">
@@ -357,6 +368,7 @@ export function EducationForm({
                 type="date"
                 value={newEdu.endDate}
                 onChange={(e) => setNewEdu({ ...newEdu, endDate: e.target.value })}
+                className="min-h-12"
               />
             </div>
           </div>
@@ -368,10 +380,11 @@ export function EducationForm({
               value={newEdu.gpa}
               onChange={(e) => setNewEdu({ ...newEdu, gpa: e.target.value })}
               placeholder="3.5"
+              className="min-h-12"
             />
           </div>
 
-          <Button onClick={handleAdd} className="w-full">
+          <Button onClick={handleAdd} className="w-full min-h-11">
             + Add Education
           </Button>
         </div>

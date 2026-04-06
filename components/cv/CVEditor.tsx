@@ -26,6 +26,7 @@ export function CVEditor({ cv }: { cv: CV }) {
   })
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [exportLoading, setExportLoading] = useState(false)
 
   // Auto-save with debounce
   useEffect(() => {
@@ -51,6 +52,17 @@ export function CVEditor({ cv }: { cv: CV }) {
 
     return () => clearTimeout(timeout)
   }, [cvData, cv.id, cv.cv_data, supabase])
+
+  const handleExportPDF = async () => {
+    try {
+      setExportLoading(true)
+      await exportCVAsPDF(cvData, `${cv.title}-CV.pdf`)
+    } catch (error) {
+      console.error('Failed to export PDF:', error)
+    } finally {
+      setExportLoading(false)
+    }
+  }
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
@@ -94,7 +106,9 @@ export function CVEditor({ cv }: { cv: CV }) {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => exportCVAsPDF(cvData, cv.title)}
+                onClick={handleExportPDF}
+                loading={exportLoading}
+                loadingText="Exporting PDF..."
               >
                 Export PDF
               </Button>

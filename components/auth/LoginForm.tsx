@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Spinner } from '@/components/ui/spinner'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 
@@ -136,15 +135,10 @@ export function LoginForm() {
         className="w-full"
         onClick={handleGoogleSignIn}
         disabled={googleLoading}
+        loading={googleLoading}
+        loadingText="Connecting..."
       >
-        {googleLoading ? (
-          <>
-            <Spinner className="mr-2 h-4 w-4" />
-            Connecting...
-          </>
-        ) : (
-          'Continue with Google'
-        )}
+        Continue with Google
       </Button>
 
       <div className="relative">
@@ -182,8 +176,8 @@ export function LoginForm() {
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? 'Signing in...' : 'Sign In'}
+      <Button type="submit" className="w-full" loading={loading} loadingText="Signing in...">
+        Sign In
       </Button>
 
       <p className="text-sm text-center text-white">

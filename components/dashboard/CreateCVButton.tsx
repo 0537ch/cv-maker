@@ -11,28 +11,29 @@ export function CreateCVButton() {
 
   const handleCreate = async () => {
     setLoading(true)
+    try {
+      const res = await fetch('/api/cvs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: 'Untitled CV',
+          template_id: 'modern',
+        }),
+      })
 
-    const res = await fetch('/api/cvs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: 'Untitled CV',
-        template_id: 'modern',
-      }),
-    })
-
-    if (res.ok) {
-      const { cv } = await res.json()
-      router.push(`/editor/${cv.id}`)
+      if (res.ok) {
+        const { cv } = await res.json()
+        router.push(`/editor/${cv.id}`)
+      }
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
-    <Button onClick={handleCreate} disabled={loading}>
+    <Button onClick={handleCreate} loading={loading} loadingText="Creating CV...">
       <HugeiconsIcon icon={Square} className="h-4 w-4 mr-2" />
-      {loading ? 'Creating...' : 'New CV'}
+      New CV
     </Button>
   )
 }

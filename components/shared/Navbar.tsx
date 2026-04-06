@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
@@ -9,10 +10,18 @@ export function Navbar({ user }: { user: { email?: string | null; full_name?: st
   const { user: clientUser } = useAuth()
   const currentUser = user || clientUser
   const supabase = createClient()
+  const [signOutLoading, setSignOutLoading] = useState(false)
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    window.location.href = '/login'
+    setSignOutLoading(true)
+    try {
+      await supabase.auth.signOut()
+      window.location.href = '/login'
+    } catch (error) {
+      console.error('Failed to sign out:', error)
+    } finally {
+      setSignOutLoading(false)
+    }
   }
 
   return (
@@ -33,7 +42,12 @@ export function Navbar({ user }: { user: { email?: string | null; full_name?: st
               <Link href="/templates">
                 <Button variant="ghost">Templates</Button>
               </Link>
-              <Button variant="outline" onClick={handleSignOut}>
+              <Button
+                variant="outline"
+                onClick={handleSignOut}
+                loading={signOutLoading}
+                loadingText="Signing out..."
+              >
                 Sign Out
               </Button>
             </>

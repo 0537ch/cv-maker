@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Spinner } from '@/components/ui/spinner'
 
 export function SignupForm() {
   const [email, setEmail] = useState('')
@@ -128,16 +127,10 @@ export function SignupForm() {
         variant="outline"
         className="w-full"
         onClick={handleGoogleSignUp}
-        disabled={googleLoading}
+        loading={googleLoading}
+        loadingText="Connecting..."
       >
-        {googleLoading ? (
-          <>
-            <Spinner className="mr-2 h-4 w-4" />
-            Connecting...
-          </>
-        ) : (
-          'Continue with Google'
-        )}
+        Continue with Google
       </Button>
 
       <div className="relative">
@@ -188,8 +181,13 @@ export function SignupForm() {
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? 'Creating account...' : 'Sign Up'}
+      <Button
+        type="submit"
+        className="w-full"
+        loading={loading}
+        loadingText="Creating account..."
+      >
+        Sign Up
       </Button>
 
       <p className="text-sm text-center text-muted-foreground">

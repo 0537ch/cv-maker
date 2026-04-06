@@ -9,14 +9,21 @@ import { useState } from 'react'
 
 export function CVCard({ cv }: { cv: CV }) {
   const router = useRouter()
-  const [deleting, setDeleting] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this CV?')) return
 
-    setDeleting(true)
-    await fetch(`/api/cvs/${cv.id}`, { method: 'DELETE' })
-    router.refresh()
+    setDeleteLoading(true)
+    try {
+      const res = await fetch(`/api/cvs/${cv.id}`, { method: 'DELETE' })
+
+      if (res.ok) {
+        router.refresh()
+      }
+    } finally {
+      setDeleteLoading(false)
+    }
   }
 
   const handleToggleFavorite = async () => {
@@ -61,10 +68,11 @@ export function CVCard({ cv }: { cv: CV }) {
           <HugeiconsIcon icon={Star} className={`h-4 w-4 ${cv.is_favorite ? 'fill-yellow-500 text-yellow-500' : ''}`} />
         </Button>
         <Button
-          variant="outline"
+          variant="destructive"
           size="icon"
           onClick={handleDelete}
-          disabled={deleting}
+          loading={deleteLoading}
+          loadingText="Deleting..."
         >
           <HugeiconsIcon icon={Delete} className="h-4 w-4" />
         </Button>

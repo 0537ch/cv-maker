@@ -84,8 +84,10 @@ export function ImportCVButton() {
         onClick={handleClick}
         disabled={loading}
         variant="outline"
+        loading={loading}
+        loadingText="Importing..."
       >
-        {loading ? 'Importing...' : 'Import JSON'}
+        Import JSON
       </Button>
       {error && (
         <p className="text-sm text-destructive mt-2 max-w-md">{error}</p>

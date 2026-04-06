@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useLayoutEffect, useCallback, useState } from 'react'
+import { useRef, useLayoutEffect, useCallback } from 'react'
 
 class WebGLRenderer {
   private canvas: HTMLCanvasElement

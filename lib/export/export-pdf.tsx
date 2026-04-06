@@ -1,5 +1,13 @@
 import { CVData } from '@/types/cv'
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+
+interface ProfileField {
+  id: string
+  label: string
+  value: string
+  type: string
+  order: number
+}
 
 // Create styles for the PDF
 const styles = StyleSheet.create({
@@ -89,12 +97,12 @@ interface ATSPDFDocumentProps {
 
 function ATSPDFDocument({ data }: ATSPDFDocumentProps) {
   // Type guard to check if personalInfo uses new dynamic fields format
-  const hasDynamicFields = (personalInfo: unknown): personalInfo is { fields: any[] } => {
+  const hasDynamicFields = (personalInfo: unknown): personalInfo is { fields: ProfileField[] } => {
     return (
       typeof personalInfo === 'object' &&
       personalInfo !== null &&
       'fields' in personalInfo &&
-      Array.isArray((personalInfo as { fields: any[] }).fields)
+      Array.isArray((personalInfo as { fields: ProfileField[] }).fields)
     )
   }
 
@@ -102,7 +110,7 @@ function ATSPDFDocument({ data }: ATSPDFDocumentProps) {
   const fields = useDynamicFields ? data.personalInfo.fields : []
 
   // Get name field
-  const nameField = fields.find((f: any) =>
+  const nameField = fields.find((f: ProfileField) =>
     f.id === 'full-name' ||
     f.id === 'name' ||
     f.label?.toLowerCase()?.includes('name') ||
@@ -110,7 +118,7 @@ function ATSPDFDocument({ data }: ATSPDFDocumentProps) {
   )
 
   // Get contact fields (not textarea, not summary/description)
-  const contactFields = fields.filter((f: any) =>
+  const contactFields = fields.filter((f: ProfileField) =>
     f.id !== 'full-name' &&
     f.id !== 'name' &&
     !f.label?.toLowerCase()?.includes('name') &&
@@ -120,7 +128,7 @@ function ATSPDFDocument({ data }: ATSPDFDocumentProps) {
   )
 
   // Get summary/description fields
-  const summaryFields = fields.filter((f: any) =>
+  const summaryFields = fields.filter((f: ProfileField) =>
     f.type === 'textarea' ||
     f.label?.toLowerCase()?.includes('summary') ||
     f.label?.toLowerCase()?.includes('description')
@@ -135,17 +143,17 @@ function ATSPDFDocument({ data }: ATSPDFDocumentProps) {
         <View style={styles.header}>
           <Text style={styles.name}>{fullName}</Text>
           <View style={styles.contactInfo}>
-            {contactFields.filter((f: any) => f.value?.trim()).map((field: any, idx: number) => (
+            {contactFields.filter((f: ProfileField) => f.value?.trim()).map((field: ProfileField, idx: number) => (
               <Text key={field.id} style={styles.contactItem}>
                 {field.value}
-                {idx < contactFields.filter((f: any) => f.value?.trim()).length - 1 && ' | '}
+                {idx < contactFields.filter((f: ProfileField) => f.value?.trim()).length - 1 && ' | '}
               </Text>
             ))}
           </View>
         </View>
 
         {/* Summary Sections */}
-        {summaryFields.map((field: any) => (
+        {summaryFields.map((field: ProfileField) => (
           field.value?.trim() && (
             <View key={field.id} style={styles.section}>
               <Text style={styles.sectionHeader}>{field.label?.toUpperCase() || 'SUMMARY'}</Text>

@@ -1,6 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { CVData, Experience, Education, Skill } from '@/types/cv'
+import { useState, useMemo } from 'react'
+import { CVData, Experience, Education, Skill, CVSection } from '@/types/cv'
 import { User, Briefcase, GraduationCap, Code, Plus, GripVertical } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import type { IconSvgElement } from '@hugeicons/react'
@@ -23,6 +23,7 @@ import {
 } from '@dnd-kit/sortable'
 import { SortableSection } from './SortableSection'
 import { SortableItem } from './SortableItem'
+import { SECTION_REGISTRY } from '@/lib/section-registry'
 
 interface TreeNode {
   id: string
@@ -40,9 +41,26 @@ interface TreeViewProps {
 }
 
 export function TreeView({ cvData, onNodeSelect, selectedNode }: TreeViewProps) {
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['profile', 'experience', 'education', 'skills']))
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set())
   const [activeId, setActiveId] = useState<string | null>(null)
-  const [sectionOrder, setSectionOrder] = useState<string[]>(cvData.sectionOrder || ['profile', 'experience', 'education', 'skills'])
+
+  // Derive section order from cvData (reactive to changes)
+  const sectionOrder = useMemo<string[]>(() => {
+    const dynamicSections = (cvData as CVData & { sections?: CVSection[] }).sections || []
+    const dynamicIds = dynamicSections.map(s => s.id)
+
+    // Start with legacy section IDs
+    const legacyIds = ['profile', 'experience', 'education', 'skills']
+
+    // If we have a saved sectionOrder, use it but add any new dynamic sections
+    if (cvData.sectionOrder && Array.isArray(cvData.sectionOrder)) {
+      const newIds = dynamicIds.filter(id => !cvData.sectionOrder!.includes(id))
+      return [...cvData.sectionOrder, ...newIds]
+    }
+
+    // Otherwise, return legacy IDs + dynamic IDs
+    return [...legacyIds, ...dynamicIds]
+  }, [cvData])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -75,22 +93,37 @@ export function TreeView({ cvData, onNodeSelect, selectedNode }: TreeViewProps) 
     const activeIdStr = active.id as string
     const overIdStr = over.id as string
 
-    // Section reordering
+    // Section reordering (both legacy and dynamic sections)
     if (activeIdStr.startsWith('section-') || !activeIdStr.includes('-')) {
       const oldIndex = sectionOrder.indexOf(activeIdStr)
       const newIndex = sectionOrder.indexOf(overIdStr)
 
       if (oldIndex !== -1 && newIndex !== -1) {
         const newOrder = arrayMove(sectionOrder, oldIndex, newIndex)
-        setSectionOrder(newOrder)
 
-        onNodeSelect(JSON.stringify({ sectionOrder: newOrder }), 'reorder-section')
+        // Update order property for dynamic sections based on their new position
+        const dynamicSections = (cvData as CVData & { sections?: CVSection[] }).sections || []
+        const updatedSections = dynamicSections.map(section => {
+          const newOrderIndex = newOrder.indexOf(section.id)
+          return {
+            ...section,
+            order: newOrderIndex >= 0 ? newOrderIndex : section.order
+          }
+        }).sort((a, b) => a.order - b.order)
+
+        // Send the updated sectionOrder and sections back to parent
+        onNodeSelect(JSON.stringify({
+          sectionOrder: newOrder,
+          sections: updatedSections
+        }), 'reorder-section')
       }
     }
 
+    // Item reordering within sections
     if (activeIdStr.includes('-') && !activeIdStr.startsWith('section-')) {
       const [sectionType] = activeIdStr.split('-')
 
+      // Handle legacy sections
       let items: (Experience | Education | Skill)[] = []
       if (sectionType === 'experience') items = [...(cvData.experience || [])]
       if (sectionType === 'education') items = [...(cvData.education || [])]
@@ -114,10 +147,31 @@ export function TreeView({ cvData, onNodeSelect, selectedNode }: TreeViewProps) 
           onNodeSelect(JSON.stringify({ skills: newItems }), 'reorder-items')
         }
       }
+
+      // Handle dynamic sections
+      const dynamicSections = (cvData as CVData & { sections?: CVSection[] }).sections || []
+      const dynamicSection = dynamicSections.find(s => s.id === sectionType)
+
+      if (dynamicSection && dynamicSection.data) {
+        const typedData = dynamicSection.data as Record<string, unknown>[]
+        const oldIndex = typedData.findIndex((item) => String(item.id) === activeIdStr)
+        const newIndex = typedData.findIndex((item) => String(item.id) === overIdStr)
+
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const newData = arrayMove(dynamicSection.data, oldIndex, newIndex)
+          onNodeSelect(JSON.stringify({
+            sections: dynamicSections.map(s =>
+              s.id === sectionType ? { ...s, data: newData } : s
+            )
+          }), 'reorder-items')
+        }
+      }
     }
   }
 
   const buildTree = (): TreeNode[] => {
+    const dynamicSections = (cvData as CVData & { sections?: CVSection[] }).sections || []
+
     const sections = [
       {
         id: 'profile',
@@ -161,7 +215,30 @@ export function TreeView({ cvData, onNodeSelect, selectedNode }: TreeViewProps) 
           children: []
         })) || [],
         count: cvData.skills?.length || 0
-      }
+      },
+      // Dynamic sections
+      ...dynamicSections.map((section) => {
+        const config = SECTION_REGISTRY[section.type] || SECTION_REGISTRY.custom
+        const typedData = section.data as Record<string, unknown>[]
+        return {
+          id: section.id,
+          label: section.header || section.label,
+          icon: config.icon,
+          children: typedData.map((item) => {
+            // Try to find a meaningful label from the item
+            const firstField = section.fieldConfig?.sort((a, b) => a.order - b.order)[0]
+            const label = firstField ? String(item[firstField.id] || section.label) : 'Item'
+
+            return {
+              id: String(item.id || ''),
+              label,
+              icon: undefined,
+              children: []
+            }
+          }),
+          count: section.data.length
+        }
+      })
     ]
 
     // Sort sections by sectionOrder

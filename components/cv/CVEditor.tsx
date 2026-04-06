@@ -1,13 +1,15 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { CV, CVData } from '@/types/cv'
+import { CV, CVData, CVSection, FieldConfig } from '@/types/cv'
 import { CVPreview } from './CVPreview'
 import { CollapsibleTreeEditor } from './CollapsibleTreeEditor'
+import { AddSectionModal } from './AddSectionModal'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { exportCVAsPDF } from '@/lib/export/export-pdf'
 import { convertOldPersonalInfoToFields } from '@/lib/utils/profile-converter'
+import { SECTION_REGISTRY } from '@/lib/section-registry'
 
 export function CVEditor({ cv }: { cv: CV }) {
   const router = useRouter()
@@ -27,6 +29,26 @@ export function CVEditor({ cv }: { cv: CV }) {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [exportLoading, setExportLoading] = useState(false)
+  const [showAddSectionModal, setShowAddSectionModal] = useState(false)
+
+  const handleAddSection = (type: string, config?: { label?: string; fieldConfig?: FieldConfig[] }) => {
+    const existingSections = (cvData as CVData & { sections?: CVSection[] }).sections || []
+    const newSection: CVSection = {
+      id: `${type}-${Date.now()}`,
+      type,
+      label: config?.label || SECTION_REGISTRY[type].label,
+      header: SECTION_REGISTRY[type].defaultHeader,
+      data: [],
+      fieldConfig: config?.fieldConfig,
+      order: existingSections.length + 1,
+      isCustom: type === 'custom'
+    }
+
+    setCvData({
+      ...cvData,
+      sections: [...existingSections, newSection]
+    } as CVData)
+  }
 
   // Auto-save with debounce
   useEffect(() => {
@@ -82,6 +104,16 @@ export function CVEditor({ cv }: { cv: CV }) {
               {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
             </div>
           </div>
+          <div className="flex items-center gap-2 mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowAddSectionModal(true)}
+              className="flex-1"
+            >
+              + Add Section
+            </Button>
+          </div>
 
           {saveError && (
             <div className="bg-destructive/10 text-destructive px-4 py-2 rounded-md text-sm mt-4">
@@ -131,6 +163,13 @@ export function CVEditor({ cv }: { cv: CV }) {
           </div>
         </div>
       </div>
+
+      {/* Add Section Modal */}
+      <AddSectionModal
+        open={showAddSectionModal}
+        onClose={() => setShowAddSectionModal(false)}
+        onAddSection={handleAddSection}
+      />
     </div>
   )
 }

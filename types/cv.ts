@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { IconSvgElement } from '@hugeicons/react'
 
 export interface CV {
   id: string
@@ -63,6 +64,25 @@ export interface SectionHeaders {
   projects?: string
 }
 
+export interface FieldConfig {
+  id: string
+  label: string
+  type: 'text' | 'textarea' | 'date' | 'url' | 'email' | 'tel' | 'number'
+  required: boolean
+  order: number
+}
+
+export interface CVSection {
+  id: string
+  type: string
+  label: string
+  header: string
+  data: unknown[]
+  fieldConfig?: FieldConfig[]
+  order: number
+  isCustom: boolean
+}
+
 export interface CVData {
   personalInfo: PersonalInfo
   experience: Experience[]
@@ -71,6 +91,31 @@ export interface CVData {
   projects?: Record<string, unknown>[]
   sectionHeaders?: SectionHeaders
   sectionOrder?: string[]
+  sections?: CVSection[]
+}
+
+export interface UnifiedCVData {
+  personalInfo: unknown
+  sections: CVSection[]
+}
+
+export type SectionDataItem = Record<string, unknown>
+
+export interface SectionFormProps {
+  data: SectionDataItem[]
+  onChange: (data: SectionDataItem[]) => void
+  sectionHeader?: string
+  onHeaderChange?: (header: string) => void
+  fieldConfig?: FieldConfig[]
+}
+
+export interface SectionConfig {
+  id: string
+  label: string
+  defaultHeader: string
+  formComponent: React.ComponentType<SectionFormProps>
+  icon: IconSvgElement
+  isPredefined: boolean
 }
 
 export interface Template {
@@ -82,3 +127,4 @@ export interface Template {
   is_premium: boolean
   sort_order: number
 }
+

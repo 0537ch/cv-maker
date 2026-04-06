@@ -47,7 +47,7 @@ export function TreeView({ cvData, onNodeSelect, selectedNode }: TreeViewProps) 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8, // 8px movement required to start drag
+        distance: 8, 
       },
     })
   )
@@ -72,7 +72,6 @@ export function TreeView({ cvData, onNodeSelect, selectedNode }: TreeViewProps) 
 
     if (!over || active.id === over.id) return
 
-    // Check if dragging sections or items
     const activeIdStr = active.id as string
     const overIdStr = over.id as string
 
@@ -85,16 +84,13 @@ export function TreeView({ cvData, onNodeSelect, selectedNode }: TreeViewProps) 
         const newOrder = arrayMove(sectionOrder, oldIndex, newIndex)
         setSectionOrder(newOrder)
 
-        // Trigger save callback with section order
         onNodeSelect(JSON.stringify({ sectionOrder: newOrder }), 'reorder-section')
       }
     }
 
-    // Item reordering (experience, education, skills)
     if (activeIdStr.includes('-') && !activeIdStr.startsWith('section-')) {
       const [sectionType] = activeIdStr.split('-')
 
-      // Get the appropriate array from cvData
       let items: (Experience | Education | Skill)[] = []
       if (sectionType === 'experience') items = [...(cvData.experience || [])]
       if (sectionType === 'education') items = [...(cvData.education || [])]

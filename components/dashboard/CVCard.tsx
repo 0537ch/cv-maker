@@ -10,6 +10,7 @@ import { useState } from 'react'
 export function CVCard({ cv }: { cv: CV }) {
   const router = useRouter()
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const [editLoading, setEditLoading] = useState(false)
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this CV?')) return
@@ -23,6 +24,15 @@ export function CVCard({ cv }: { cv: CV }) {
       }
     } finally {
       setDeleteLoading(false)
+    }
+  }
+
+  const handleEdit = async () => {
+    setEditLoading(true)
+    try {
+      router.push(`/editor/${cv.id}`)
+    } finally {
+      setEditLoading(false)
     }
   }
 
@@ -55,8 +65,10 @@ export function CVCard({ cv }: { cv: CV }) {
       </CardContent>
       <CardFooter className="gap-2">
         <Button
-          onClick={() => router.push(`/editor/${cv.id}`)}
+          onClick={handleEdit}
           className="flex-1"
+          loading={editLoading}
+          loadingText="Opening..."
         >
           Edit
         </Button>

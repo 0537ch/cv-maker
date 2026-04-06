@@ -29,10 +29,8 @@ export function ImportCVButton() {
       let cvData: CVData
 
       try {
-        // Try strict validation first (for our exported format)
         cvData = await validateImportedCV(jsonData)
       } catch {
-        // Fall back to loose formatting for other JSON formats
         cvData = formatCVDataForImport(jsonData)
       }
 
@@ -43,7 +41,6 @@ export function ImportCVButton() {
         return
       }
 
-      // Create CV with imported data
       const res = await fetch('/api/cvs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono, Inter } from "next/font/google"
+import { LayoutGroup } from 'framer-motion'
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -31,7 +32,9 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", inter.variable, geistHeading.variable)}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <LayoutGroup>
+          <ThemeProvider>{children}</ThemeProvider>
+        </LayoutGroup>
       </body>
     </html>
   )

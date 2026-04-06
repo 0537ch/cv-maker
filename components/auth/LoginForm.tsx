@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Spinner } from '@/components/ui/spinner'
+import { motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 
 export function LoginForm() {
   const [email, setEmail] = useState('')
@@ -111,6 +113,17 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <motion.button
+        type="button"
+        onClick={() => router.push('/')}
+        className="mb-6 flex items-center gap-2 text-sm text-white hover:text-white/80 transition-colors"
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back to home
+      </motion.button>
       {error && (
         <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md">
           {error}
@@ -139,7 +152,7 @@ export function LoginForm() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
+          <span className="bg-background px-2 text-white">
             Or continue with email
           </span>
         </div>
@@ -173,7 +186,7 @@ export function LoginForm() {
         {loading ? 'Signing in...' : 'Sign In'}
       </Button>
 
-      <p className="text-sm text-center text-muted-foreground">
+      <p className="text-sm text-center text-white">
         Don&apos;t have an account?{' '}
         <a href="/signup" className="text-primary hover:underline">
           Sign up

@@ -66,7 +66,7 @@ export function CVEditor({ cv }: { cv: CV }) {
               ← Back
             </Button>
             <div className="flex items-center gap-4">
-              <h1 className="text-lg font-bold truncate max-w-[200px]">{cv.title}</h1>
+              <h1 className="text-lg font-bold truncate max-w-50">{cv.title}</h1>
               {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
             </div>
           </div>

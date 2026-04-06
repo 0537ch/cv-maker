@@ -164,7 +164,7 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                         const updatedFields = profileFields.filter(f => f.id !== field.id)
                         onChange({ ...cvData, personalInfo: { fields: updatedFields } })
                       }}
-                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive flex-shrink-0"
+                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive shrink-0"
                     >
                       <HugeiconsIcon icon={Trash2} size={14} />
                     </Button>
@@ -224,7 +224,7 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                               const updatedFields = profileFields.filter(f => f.id !== field.id)
                               onChange({ ...cvData, personalInfo: { fields: updatedFields } })
                             }}
-                            className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive flex-shrink-0"
+                            className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive shrink-0"
                           >
                             <HugeiconsIcon icon={Trash2} size={14} />
                           </Button>
@@ -302,7 +302,7 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                         const updatedFields = profileFields.filter(f => f.id !== field.id)
                         onChange({ ...cvData, personalInfo: { fields: updatedFields } })
                       }}
-                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive flex-shrink-0"
+                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive shrink-0"
                     >
                       <HugeiconsIcon icon={Trash2} size={14} />
                     </Button>
@@ -310,7 +310,7 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                   <textarea
                     value={field.value}
                     onChange={(e) => handleFieldChange(field.id, { value: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md text-sm min-h-[120px] focus:ring-2 focus:ring-primary focus:border-primary"
+                    className="w-full px-3 py-2 border rounded-md text-sm min-h-30 focus:ring-2 focus:ring-primary focus:border-primary"
                     placeholder={`Write your ${field.label.toLowerCase()} here...`}
                   />
                   <p className="text-xs text-muted-foreground">

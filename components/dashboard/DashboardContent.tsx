@@ -12,7 +12,7 @@ export function DashboardContent({ cvs }: { cvs: CV[] }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="space-y-6"
+      className="space-y-6 px-4 sm:px-6 lg:px-8"
     >
       {/* Header with gradient text */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

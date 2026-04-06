@@ -4,7 +4,7 @@ import { CVData, ProfileField } from '@/types/cv'
 import { ExperienceForm } from './sections/ExperienceForm'
 import { EducationForm } from './sections/EducationForm'
 import { SkillsForm } from './sections/SkillsForm'
-import { ChevronDown, ChevronRight, User, Briefcase, GraduationCap, Award, Plus, Trash2 } from '@hugeicons/core-free-icons'
+import { ChevronDown, ChevronRight, User, Briefcase, GraduationCap, Award, Plus, Trash2, GripVertical } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Button } from '@/components/ui/button'
 
@@ -17,6 +17,7 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['profile']))
   const [expandedFields, setExpandedFields] = useState<Set<string>>(new Set())
   const [fieldIdCounter, setFieldIdCounter] = useState(0)
+  const [draggedFieldId, setDraggedFieldId] = useState<string | null>(null)
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => {
@@ -40,6 +41,46 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
       }
       return next
     })
+  }
+
+  const handleFieldDragStart = (e: React.DragEvent, fieldId: string) => {
+    setDraggedFieldId(fieldId)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleFieldDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleFieldDrop = (e: React.DragEvent, dropId: string) => {
+    e.preventDefault()
+    if (!draggedFieldId || draggedFieldId === dropId) return
+
+    const profileFields: ProfileField[] = (cvData.personalInfo as { fields?: ProfileField[] }).fields || []
+    const draggedIndex = profileFields.findIndex(f => f.id === draggedFieldId)
+    const dropIndex = profileFields.findIndex(f => f.id === dropId)
+
+    if (draggedIndex === -1 || dropIndex === -1) return
+
+    const newFields = [...profileFields]
+    const [removed] = newFields.splice(draggedIndex, 1)
+    newFields.splice(dropIndex, 0, removed)
+
+    // Update order property for all fields
+    newFields.forEach((field, idx) => {
+      field.order = idx
+    })
+
+    onChange({
+      ...cvData,
+      personalInfo: { fields: newFields }
+    })
+    setDraggedFieldId(null)
+  }
+
+  const handleFieldDragEnd = () => {
+    setDraggedFieldId(null)
   }
 
   const handleFieldChange = (fieldId: string, updates: Partial<ProfileField>) => {
@@ -146,10 +187,33 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
 
             {/* Contact Info Fields - always visible, directly editable */}
             {otherFields
-              .filter(f => f.type !== 'textarea' && !f.label.includes('Summary') && !f.label.includes('Description'))
+              .filter(f =>
+                f.type !== 'textarea' &&
+                !f.label.includes('Summary') &&
+                !f.label.includes('Description') &&
+                // Exclude social links (they have their own section below)
+                !f.label.toLowerCase().includes('linkedin') &&
+                !f.label.toLowerCase().includes('github') &&
+                !f.label.toLowerCase().includes('twitter') &&
+                !f.label.toLowerCase().includes('website') &&
+                !f.label.toLowerCase().includes('portfolio')
+              )
               .map(field => (
-                <div key={field.id} className="space-y-2">
+                <div
+                  key={field.id}
+                  draggable
+                  onDragStart={(e) => handleFieldDragStart(e, field.id)}
+                  onDragOver={handleFieldDragOver}
+                  onDrop={(e) => handleFieldDrop(e, field.id)}
+                  onDragEnd={handleFieldDragEnd}
+                  className={`space-y-2 border rounded-lg p-3 transition-all ${
+                    draggedFieldId === field.id ? 'opacity-50 ring-2 ring-primary' : ''
+                  }`}
+                >
                   <div className="flex items-center justify-between gap-2">
+                    <div className="cursor-grab active:cursor-grabbing flex-shrink-0">
+                      <HugeiconsIcon icon={GripVertical} size={14} className="text-muted-foreground" />
+                    </div>
                     <input
                       type="text"
                       value={field.label}
@@ -208,8 +272,21 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
                       f.label.toLowerCase().includes('portfolio')
                     )
                     .map(field => (
-                      <div key={field.id} className="space-y-2">
+                      <div
+                        key={field.id}
+                        draggable
+                        onDragStart={(e) => handleFieldDragStart(e, field.id)}
+                        onDragOver={handleFieldDragOver}
+                        onDrop={(e) => handleFieldDrop(e, field.id)}
+                        onDragEnd={handleFieldDragEnd}
+                        className={`space-y-2 border rounded-md p-2 transition-all ${
+                          draggedFieldId === field.id ? 'opacity-50 ring-2 ring-primary' : ''
+                        }`}
+                      >
                         <div className="flex items-center justify-between gap-2">
+                          <div className="cursor-grab active:cursor-grabbing flex-shrink-0">
+                            <HugeiconsIcon icon={GripVertical} size={12} className="text-muted-foreground" />
+                          </div>
                           <input
                             type="text"
                             value={field.label}
@@ -286,8 +363,21 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
             {otherFields
               .filter(f => f.type === 'textarea' || f.label.includes('Summary') || f.label.includes('Description'))
               .map(field => (
-                <div key={field.id} className="space-y-2 border-t pt-3">
+                <div
+                  key={field.id}
+                  draggable
+                  onDragStart={(e) => handleFieldDragStart(e, field.id)}
+                  onDragOver={handleFieldDragOver}
+                  onDrop={(e) => handleFieldDrop(e, field.id)}
+                  onDragEnd={handleFieldDragEnd}
+                  className={`space-y-2 border-t pt-3 transition-all ${
+                    draggedFieldId === field.id ? 'opacity-50 ring-2 ring-primary' : ''
+                  }`}
+                >
                   <div className="flex items-center justify-between gap-2">
+                    <div className="cursor-grab active:cursor-grabbing flex-shrink-0">
+                      <HugeiconsIcon icon={GripVertical} size={14} className="text-muted-foreground" />
+                    </div>
                     <input
                       type="text"
                       value={field.label}

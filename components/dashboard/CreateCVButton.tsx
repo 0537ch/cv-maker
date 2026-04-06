@@ -17,7 +17,7 @@ export function CreateCVButton() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: 'Untitled CV',
-          template_id: 'modern',
+          template_id: 'ats',
         }),
       })
 

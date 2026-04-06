@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json()
-  const { title, template_id = 'modern', cv_data } = body
+  const { title, template_id = 'ats', cv_data } = body
 
   const cv = await prisma.cV.create({
     data: {

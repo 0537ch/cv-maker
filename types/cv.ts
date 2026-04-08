@@ -128,3 +128,10 @@ export interface Template {
   sort_order: number
 }
 
+export interface DeleteSectionDialogProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: () => void
+  sectionLabel: string
+}
+

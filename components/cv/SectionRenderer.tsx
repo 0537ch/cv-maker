@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { ChevronDown, ChevronRight, Trash2 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Button } from '@/components/ui/button'
 import { SECTION_REGISTRY } from '@/lib/section-registry'
 import { CVSection } from '@/types/cv' // Removed CVData as it was unused
+import { DeleteSectionDialog } from './DeleteSectionDialog'
 
 interface SectionRendererProps {
   section: CVSection
@@ -16,42 +17,38 @@ interface SectionRendererProps {
   onToggle: () => void
 }
 
-export function SectionRenderer({ 
-  section, 
-  onChange, 
-  onDelete, 
-  isExpanded, 
-  onToggle 
+export function SectionRenderer({
+  section,
+  onChange,
+  onDelete,
+  isExpanded,
+  onToggle
 }: SectionRendererProps) {
   const config = SECTION_REGISTRY[section.type] || SECTION_REGISTRY.custom
   const FormComponent = config.formComponent
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const isPredefined = ['experience', 'education', 'skills'].includes(section.type)
 
-  const [localHeader, setLocalHeader] = useState(section.header)
+  // Use ref to store the latest onChange without causing re-renders
+  const onChangeRef = useRef(onChange)
 
-  // Debounced header update to prevent focus loss
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (localHeader !== section.header) {
-        onChange({
-          ...section,
-          header: localHeader
-        })
-      }
-    }, 500)
-
-    return () => clearTimeout(timeout)
-  }, [localHeader, section, onChange])
+    onChangeRef.current = onChange
+  }, [onChange])
 
   const handleDataChange = useCallback((newData: unknown[]) => {
-    onChange({
+    onChangeRef.current({
       ...section,
       data: newData
     })
-  }, [section, onChange])
+  }, [section])
 
   const handleHeaderChange = useCallback((newHeader: string) => {
-    setLocalHeader(newHeader)
-  }, [])
+    onChangeRef.current({
+      ...section,
+      header: newHeader
+    })
+  }, [section])
 
   return (
     <div className="border rounded-lg overflow-hidden">
@@ -68,13 +65,11 @@ export function SectionRenderer({
             {Array.isArray(section.data) ? section.data.length : 0} items
           </span>
         </button>
-        {onDelete && section.isCustom && (
+        {onDelete && section.type !== 'profile' && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => {
-              if (confirm('Delete this section?')) onDelete()
-            }}
+            onClick={() => setShowDeleteDialog(true)}
             aria-label={`Delete ${section.label} section`}
             className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
           >
@@ -88,12 +83,19 @@ export function SectionRenderer({
           <FormComponent
             data={section.data as Record<string, unknown>[]}
             onChange={handleDataChange}
-            sectionHeader={localHeader}
+            sectionHeader={section.header}
             onHeaderChange={handleHeaderChange}
             fieldConfig={section.fieldConfig}
           />
         </div>
       )}
+
+      <DeleteSectionDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={onDelete}
+        sectionLabel={section.label}
+      />
     </div>
   )
 }

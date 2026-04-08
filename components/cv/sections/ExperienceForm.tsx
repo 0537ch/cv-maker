@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { GripVertical, Trash2, ChevronDown, ChevronRight, Pencil } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 
@@ -31,6 +31,12 @@ export function ExperienceForm({
     description: ''
   })
   const [draggedId, setDraggedId] = useState<string | null>(null)
+  const [localSectionHeader, setLocalSectionHeader] = useState<string | undefined>(sectionHeader)
+
+  // Sync local section header when prop changes
+  useEffect(() => {
+    setLocalSectionHeader(sectionHeader)
+  }, [sectionHeader])
 
   const toggleExpand = (id: string) => {
     setExpandedItems(prev => {
@@ -153,8 +159,15 @@ export function ExperienceForm({
           <Label htmlFor="sectionHeader">Section Header</Label>
           <Input
             id="sectionHeader"
-            value={sectionHeader || defaultHeader}
-            onChange={(e) => onHeaderChange(e.target.value)}
+            value={localSectionHeader || defaultHeader}
+            onChange={(e) => setLocalSectionHeader(e.target.value)}
+            onBlur={(e) => onHeaderChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHeaderChange(e.currentTarget.value)
+                e.currentTarget.blur()
+              }
+            }}
             placeholder="Professional Experience"
             className="min-h-12"
           />

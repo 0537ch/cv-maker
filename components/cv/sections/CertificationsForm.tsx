@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { SectionFormProps, SectionDataItem } from '@/types/cv'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -8,12 +8,18 @@ import { Trash2, Plus } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { v4 as uuidv4 } from 'uuid'
 
-export function CertificationsForm({ 
-  data, 
-  onChange, 
-  sectionHeader, 
-  onHeaderChange 
+export function CertificationsForm({
+  data,
+  onChange,
+  sectionHeader,
+  onHeaderChange
 }: SectionFormProps) {
+  const [localSectionHeader, setLocalSectionHeader] = useState<string | undefined>(sectionHeader)
+
+  // Sync local section header when prop changes
+  useEffect(() => {
+    setLocalSectionHeader(sectionHeader)
+  }, [sectionHeader])
 
   const addCertification = () => {
     const newCert: SectionDataItem = {
@@ -42,8 +48,15 @@ export function CertificationsForm({
           <Label htmlFor="certHeader">Section Header</Label>
           <Input
             id="certHeader"
-            value={sectionHeader || 'Certifications'}
-            onChange={(e) => onHeaderChange(e.target.value)}
+            value={localSectionHeader || 'Certifications'}
+            onChange={(e) => setLocalSectionHeader(e.target.value)}
+            onBlur={(e) => onHeaderChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHeaderChange(e.currentTarget.value)
+                e.currentTarget.blur()
+              }
+            }}
             placeholder="Certifications & Licenses"
           />
         </div>

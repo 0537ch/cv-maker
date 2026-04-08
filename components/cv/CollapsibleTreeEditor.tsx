@@ -29,11 +29,17 @@ interface CollapsibleTreeEditorProps {
 }
 
 export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEditorProps) {
+  const [mounted, setMounted] = useState(false)
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set())
   const [expandedFields, setExpandedFields] = useState<Set<string>>(new Set())
   const [fieldIdCounter, setFieldIdCounter] = useState(0)
   const [draggedFieldId, setDraggedFieldId] = useState<string | null>(null)
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
+
+  // Prevent hydration mismatch with DnD kit
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -199,6 +205,12 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
   }
 
   const handleSectionDelete = (sectionId: string) => {
+    // Prevent Profile section deletion
+    if (sectionId === 'profile') {
+      console.error('Profile section cannot be deleted')
+      return
+    }
+
     const newSections = unifiedSections.filter(s => s.id !== sectionId)
     onChange({
       ...cvData,
@@ -742,43 +754,62 @@ export function CollapsibleTreeEditor({ cvData, onChange }: CollapsibleTreeEdito
 
       {/* Dynamic Sections - Including legacy sections (Experience, Education, Skills) for unified reordering */}
       {sortedSections.length > 0 && (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleSectionDragStart}
-          onDragEnd={handleSectionDragEnd}
-        >
-          <SortableContext
-            items={sortedSections.map(s => s.id)}
-            strategy={verticalListSortingStrategy}
-          >
+        <>
+          {!mounted ? (
+            // Render static sections during SSR to prevent hydration mismatch
             <div className="space-y-2">
               {sortedSections.map(section => (
-                <SortableSectionWrapper
+                <SectionRenderer
                   key={section.id}
                   section={section}
                   onChange={handleSectionChange}
-                  onDelete={section.isCustom ? () => handleSectionDelete(section.id) : undefined}
+                  onDelete={section.type !== 'profile' ? () => handleSectionDelete(section.id) : undefined}
                   isExpanded={expandedSections.has(section.id)}
                   onToggle={() => toggleSection(section.id)}
                 />
               ))}
             </div>
-          </SortableContext>
+          ) : (
+            // Render with DnD functionality after client-side mount
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragStart={handleSectionDragStart}
+              onDragEnd={handleSectionDragEnd}
+            >
+              <SortableContext
+                items={sortedSections.map(s => s.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="space-y-2">
+                  {sortedSections.map(section => (
+                    <SortableSectionWrapper
+                      key={section.id}
+                      section={section}
+                      onChange={handleSectionChange}
+                      onDelete={section.type !== 'profile' ? () => handleSectionDelete(section.id) : undefined}
+                      isExpanded={expandedSections.has(section.id)}
+                      onToggle={() => toggleSection(section.id)}
+                    />
+                  ))}
+                </div>
+              </SortableContext>
 
-          <DragOverlay>
-            {activeSectionId ? (
-              <div className="opacity-50">
-                <SectionRenderer
-                  section={sortedSections.find(s => s.id === activeSectionId)!}
-                  onChange={() => {}}
-                  isExpanded={false}
-                  onToggle={() => {}}
-                />
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
+              <DragOverlay>
+                {activeSectionId ? (
+                  <div className="opacity-50">
+                    <SectionRenderer
+                      section={sortedSections.find(s => s.id === activeSectionId)!}
+                      onChange={() => {}}
+                      isExpanded={false}
+                      onToggle={() => {}}
+                    />
+                  </div>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+          )}
+        </>
       )}
     </div>
   )

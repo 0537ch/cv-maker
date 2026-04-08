@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Trash2, Plus, GripVertical } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { v4 as uuidv4 } from 'uuid'
+import { useState, useEffect } from 'react'
 
 interface DynamicProfileFormProps {
   fields: ProfileField[]
@@ -16,6 +17,12 @@ interface DynamicProfileFormProps {
 }
 
 export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderChange }: DynamicProfileFormProps) {
+  const [localSectionHeader, setLocalSectionHeader] = useState<string | undefined>(sectionHeader)
+
+  // Sync local section header when prop changes
+  useEffect(() => {
+    setLocalSectionHeader(sectionHeader)
+  }, [sectionHeader])
   const addField = () => {
     const newField: ProfileField = {
       id: uuidv4(),
@@ -195,8 +202,15 @@ export function DynamicProfileForm({ fields, onChange, sectionHeader, onHeaderCh
           <Label htmlFor="sectionHeader" className="text-slate-300">Section Header</Label>
           <Input
             id="sectionHeader"
-            value={sectionHeader || 'Profile'}
-            onChange={(e) => onHeaderChange(e.target.value)}
+            value={localSectionHeader || 'Profile'}
+            onChange={(e) => setLocalSectionHeader(e.target.value)}
+            onBlur={(e) => onHeaderChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHeaderChange(e.currentTarget.value)
+                e.currentTarget.blur()
+              }
+            }}
             placeholder="Profile"
             className="min-h-12 bg-slate-900/40 backdrop-blur-sm border-cyan-500/20
                        focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20

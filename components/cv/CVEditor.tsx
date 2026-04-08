@@ -62,15 +62,33 @@ export function CVEditor({ cv }: { cv: CV }) {
         try {
           setSaveError(null)
           setSaving(true)
-          const { error } = await supabase
-            .from('cvs')
-            .update({ cv_data: cvData, updated_at: new Date().toISOString() })
-            .eq('id', cv.id)
 
-          if (error) throw error
+          // Validate data before saving
+          const dataToSave = JSON.parse(JSON.stringify(cvData))
+
+          const { error, data } = await supabase
+            .from('cvs')
+            .update({ cv_data: dataToSave, updated_at: new Date().toISOString() })
+            .eq('id', cv.id)
+            .select()
+
+          if (error) {
+            console.error('Supabase error:', error)
+            console.error('Error details:', JSON.stringify(error, null, 2))
+            throw error
+          }
+
+          console.log('Auto-save successful:', data)
           setSaving(false)
         } catch (error) {
           console.error('Auto-save failed:', error)
+          console.error('Error type:', typeof error)
+          console.error('Error message:', error instanceof Error ? error.message : 'Unknown error')
+          console.error('Error stack:', error instanceof Error ? error.stack : 'No stack')
+          if (error && typeof error === 'object') {
+            console.error('Error keys:', Object.keys(error))
+            console.error('Full error:', JSON.stringify(error, null, 2))
+          }
           setSaveError('Failed to save changes')
           setSaving(false)
         }

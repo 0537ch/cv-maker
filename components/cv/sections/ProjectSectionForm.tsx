@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { SectionFormProps, SectionDataItem } from '@/types/cv'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,6 +10,12 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { v4 as uuidv4 } from 'uuid'
 
 export function ProjectSectionForm({ data, onChange, sectionHeader, onHeaderChange }: SectionFormProps) {
+  const [localSectionHeader, setLocalSectionHeader] = useState<string | undefined>(sectionHeader)
+
+  // Sync local section header when prop changes
+  useEffect(() => {
+    setLocalSectionHeader(sectionHeader)
+  }, [sectionHeader])
   
   const addItem = () => {
     const newItem: SectionDataItem = {
@@ -31,9 +37,16 @@ export function ProjectSectionForm({ data, onChange, sectionHeader, onHeaderChan
       {onHeaderChange && (
         <div className="space-y-2 pb-4 border-b">
           <Label>Section Title</Label>
-          <Input 
-            value={sectionHeader} 
-            onChange={(e) => onHeaderChange(e.target.value)} 
+          <Input
+            value={localSectionHeader}
+            onChange={(e) => setLocalSectionHeader(e.target.value)}
+            onBlur={(e) => onHeaderChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHeaderChange(e.currentTarget.value)
+                e.currentTarget.blur()
+              }
+            }}
             placeholder="e.g. Projects"
           />
         </div>

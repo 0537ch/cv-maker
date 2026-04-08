@@ -2,6 +2,7 @@
 import { CV } from '@/types/cv'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { DeleteConfirmDialog } from '@/components/ui/delete-confirm-dialog'
 import { Star, Delete } from '@hugeicons/core-free-icons'
 import { Loader2 } from 'lucide-react'
 import { HugeiconsIcon } from '@hugeicons/react'
@@ -15,10 +16,9 @@ export function CVCard({ cv }: { cv: CV }) {
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [editedTitle, setEditedTitle] = useState(cv.title)
   const [saveLoading, setSaveLoading] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this CV?')) return
-
     setDeleteLoading(true)
     try {
       const res = await fetch(`/api/cvs/${cv.id}`, { method: 'DELETE' })
@@ -152,13 +152,21 @@ export function CVCard({ cv }: { cv: CV }) {
         <Button
           variant="destructive"
           size="icon"
-          onClick={handleDelete}
+          onClick={() => setShowDeleteDialog(true)}
           loading={deleteLoading}
           loadingText="Deleting..."
         >
           <HugeiconsIcon icon={Delete} className="h-4 w-4" />
         </Button>
       </CardFooter>
+
+      <DeleteConfirmDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={handleDelete}
+        title="Delete CV?"
+        description="This action cannot be undone. This will permanently delete this CV and all its data."
+      />
     </Card>
   )
 }
